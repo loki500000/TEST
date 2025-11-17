@@ -1,0 +1,68 @@
+# AI Freelance Search App - Python Dependencies
+
+# FastAPI and Web Framework
+fastapi==0.109.2
+uvicorn[standard]==0.27.1
+python-multipart==0.0.9
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+alembic==1.13.1
+
+# Redis (for caching and task queue)
+redis==5.0.1
+celery==5.3.6
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.1.2
+python-dotenv==1.0.1
+
+# Pydantic
+pydantic==2.5.3
+pydantic-settings==2.1.0
+email-validator==2.1.0
+
+# HTTP Client
+httpx==0.26.0
+requests==2.31.0
+
+# Scraping (for job aggregation)
+beautifulsoup4==4.12.3
+lxml==5.1.0
+selenium==4.17.2
+
+# AI/ML - Groq Integration
+groq==0.4.2
+
+# Date/Time
+python-dateutil==2.8.2
+
+# Data Processing
+pandas==2.2.0
+numpy==1.26.3
+
+# Utilities
+pyyaml==6.0.1
+python-slugify==8.0.1
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+pytest-cov==4.1.0
+
+# Code Quality
+black==24.1.1
+flake8==7.0.0
+mypy==1.8.0
+
+# Monitoring
+prometheus-client==0.19.0
+
+# Email (future)
+# sendgrid==6.11.0
+
+# Payment processing (future)
+# stripe==7.11.0

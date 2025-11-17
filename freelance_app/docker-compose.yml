@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: freelance_postgres
+    environment:
+      POSTGRES_DB: freelance_db
+      POSTGRES_USER: freelance_user
+      POSTGRES_PASSWORD: freelance_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U freelance_user -d freelance_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: freelance_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # FastAPI Application
+  api:
+    build:
+      context: ..
+      dockerfile: freelance_app/Dockerfile
+    container_name: freelance_api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://freelance_user:freelance_pass@postgres:5432/freelance_db
+      - REDIS_URL=redis://redis:6379/0
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=false
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ..:/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+  redis_data:
